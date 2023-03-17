@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  app:
+    container_name: "app"
+    image: ruanbekker/flask-mysql-guestbook:nunito
+    build:
+      context: . 
+      dockerfile: Dockerfile
+    environment:
+      - FLASK_APP=application
+      - GOOGLE_FONT=Nunito
+      - MYSQL_USER=app_user
+      - MYSQL_PASSWORD=app_password
+      - MYSQL_DATABASE=app_db
+      - MYSQL_HOST=db
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    restart: "always"
+    networks:
+      - guestbook
+  db:
+    image: mariadb:10.5-bionic
+    container_name: "db"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_USER=app_user
+      - MYSQL_PASSWORD=app_password
+      - MYSQL_DATABASE=app_db
+      - MYSQL_HOST=db
+    volumes:
+      - guestbook:/var/lib/mysql:rw,delegated
+    networks:
+      - guestbook
+
+networks:
+  guestbook: 
+    name: guestbook
+
+volumes:
+  guestbook: {}
