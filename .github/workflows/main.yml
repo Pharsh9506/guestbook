@@ -29,12 +29,12 @@ jobs:
 
     - name: Create Kubernetes secrets
       env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
       run: kubectl create secret generic app-secrets --from-literal=db_root=${{ secrets.db_root }} --from-literal=db_password=${{ secrets.db_password }}
 
 
     - name: Apply Kubernetes manifest
       env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
       run: |
         kubectl apply -f kubernetes/
