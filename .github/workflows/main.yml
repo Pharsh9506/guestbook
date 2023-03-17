@@ -25,16 +25,20 @@ jobs:
         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
         chmod +x kubectl
         sudo mv kubectl /usr/local/bin/
+        echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
 
 
     - name: Create Kubernetes secrets
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
-      run: kubectl create secret generic app-secrets --from-literal=db_root=${{ secrets.db_root }} --from-literal=db_password=${{ secrets.db_password }}
+      run: |
+        export KUBECONFIG=kubeconfig.yaml
+        kubectl create secret generic app-secrets --from-literal=db_root=${{ secrets.db_root }} --from-literal=db_password=${{ secrets.db_password }}
 
 
     - name: Apply Kubernetes manifest
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
       run: |
+        export KUBECONFIG=kubeconfig.yaml
         kubectl apply -f kubernetes/
