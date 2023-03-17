@@ -29,7 +29,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: db_root_password
+              key: db_root
         - name: MYSQL_USER
           value: app_user
         - name: MYSQL_DATABASE

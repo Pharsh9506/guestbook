@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: ruanbekker/flask-mysql-guestbook:nunito
+          image: harshppppp/guestbook:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
